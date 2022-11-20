@@ -11,18 +11,16 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData) {
 	puts("kindly enter cardholder name ");
 	gets_s(crdHldrName, 999);
 	uint8_t lenName = strlen(crdHldrName);
-	puts(crdHldrName);
-	puts(crdHldrName);
-	puts(crdHldrName);
+	
 	if (20 > lenName || 24 < lenName || crdHldrName == NULL)
 		return WRONG_NAME;
 	else
 	{
-		for (int i = 0; i++; i < 25)
+		for (int i = 0; i<25; i++)
 			cardData->cardHolderName[i] = crdHldrName[i];
 
 		
-
+	//	puts(cardData->cardHolderName);
 		return CARD_OK;
 	}
 	
@@ -42,7 +40,7 @@ EN_cardError_t getCardExpiryDate(ST_cardData_t* cardData) {
 		return WRONG_EXP_DATE;
 	else
 	{
-		for (int i = 0; i++; i < 6)
+		for (int i = 0; i<6; i ++)
 			cardData->cardExpirationDate[i] = crdExpDate[i];
 
 		
@@ -55,7 +53,7 @@ EN_cardError_t getCardPAN(ST_cardData_t* cardData) {
 
 
 	uint8_t crdPAN[1000];
-	puts("kindly enter expiry date   ");
+	puts("kindly PAN   ");
 	gets_s(crdPAN, 999);
 	uint8_t lencrdPAN = strlen(crdPAN);
 	
@@ -63,11 +61,11 @@ EN_cardError_t getCardPAN(ST_cardData_t* cardData) {
 		return WRONG_PAN;
 	else
 	{
-		for (int i = 0; i++; i < 16)
+		for (int i = 0; i<20; i ++)
 			cardData->primaryAccountNumber[i] = crdPAN[i];
 
-
-
+		puts(crdPAN);
+		puts(cardData->primaryAccountNumber);
 		return CARD_OK;
 	}
 }

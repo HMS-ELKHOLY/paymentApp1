@@ -1,8 +1,6 @@
-#include "card/card.h"
-#include "terminal/terminal.h"
+#include "Application/app.h"
 int main() {
 
-	getCardHolderName(0);
-	getTransactionAmount(0);
+	appStart();
 	return 0;
 }

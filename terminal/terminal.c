@@ -3,7 +3,7 @@
 EN_terminalError_t getTransactionDate(ST_terminalData_t* termData){
 
 	uint8_t trscnDate[1000];
-	puts("kindly enter cardholder name ");
+	puts("kindly enter transction date ");
 	gets_s(trscnDate, 999);
 	uint8_t lentrscnDate = strlen(trscnDate);
 	uint8_t chkFormat =0 ;
@@ -27,7 +27,10 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t* termData){
 	}
 }
 EN_terminalError_t isCardExpired(ST_cardData_t* cardData, ST_terminalData_t* termData) {
-	if ((cardData->cardExpirationDate[0] - termData->transactionDate[3]) > 0 && (cardData->cardExpirationDate[1] - termData->transactionDate[4]) > 0)
+	uint8_t chkMnth = ((cardData->cardExpirationDate[0] - termData->transactionDate[3]) >= 0 && (cardData->cardExpirationDate[1] - termData->transactionDate[4]) >= 0);
+	uint8_t chkYear = ((cardData->cardExpirationDate[3] - termData->transactionDate[8]) >= 0 && (cardData->cardExpirationDate[4] - termData->transactionDate[9]) >= 0);
+
+	if (chkMnth!=0 && chkYear!=0)
 	{
 		return TERMINAL_OK;
 
@@ -42,10 +45,11 @@ EN_terminalError_t isCardExpired(ST_cardData_t* cardData, ST_terminalData_t* ter
 }
 EN_terminalError_t getTransactionAmount(ST_terminalData_t* termData) {
 	uint8_t TransactionAmount[20];
+	puts("enter amount");
 	gets_s(TransactionAmount, 19);
-	termData->transAmount=strtof(TransactionAmount);
-	if (termData->transAmount > termData->maxTransAmount)
-		return EXCEED_MAX_AMOUNT;
+	termData->transAmount=strtof(TransactionAmount,NULL);
+	if (termData->transAmount <=0)
+		return INVALID_AMOUNT;
 	else
 		return TERMINAL_OK;
 
@@ -56,12 +60,19 @@ EN_terminalError_t getTransactionAmount(ST_terminalData_t* termData) {
 EN_terminalError_t setMaxAmount(ST_terminalData_t* termData) {
 	uint8_t maxAmount[20];
 	gets_s(maxAmount, 19);
-	termData->transAmount = strtof(maxAmount);
+	termData->maxTransAmount= strtof(maxAmount,NULL);
 	if ( termData->maxTransAmount<=0)
 		return INVALID_MAX_AMOUNT;
 	else
 		return TERMINAL_OK;
 
 
+
+}
+
+EN_terminalError_t isBelowMaxAmount(ST_terminalData_t* termData) {
+	if (termData->transAmount > termData->maxTransAmount)
+		return EXCEED_MAX_AMOUNT;
+	return TERMINAL_OK;
 
 }

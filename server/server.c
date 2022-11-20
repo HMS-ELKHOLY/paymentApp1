@@ -1,46 +1,51 @@
 #include"server.h"
 #include <string.h>
-ST_accountsDB_t accountsDB[255];
-uint8_t currentIndexAccDb = -1;
+ST_accountsDB_t accountsDB[255] = { 
+	{2000,RUNNING,"1234567891234567891"},
+	{2000,BLOCKED,"2214569891234567894"},
+};
+uint8_t* transStateVal[] = { "APPROVED", "DECLINED_INSUFFECIENT_FUND", "DECLINED_STOLEN_CARD", "FRAUD_CARD", "INTERNAL_SERVER_ERROR" };
 ST_transaction_t transactionDB[255] = { 0 };
-uint8_t trnscDbIndex;
+uint8_t trnscDbIndex=-1;
 EN_transState_t recieveTransactionData(ST_transaction_t* transData) {
-	uint8_t foundAccount = 0;
-	for (int i = 0; i < 255; i++) {
-		if (0 == strcmp(transData->cardHolderData.primaryAccountNumber, accountsDB[i].primaryAccountNumber)) {
-			foundAccount = 1;
-			if (currentIndexAccDb == 255)
-				return INTERNAL_SERVER_ERROR;
-			currentIndexAccDb++;
-			if (accountsDB[i].balance < transData->terminalData.transAmount || transData->terminalData.transAmount>transData->terminalData.maxTransAmount)
-			{
-				return DECLINED_INSUFFECIENT_FUND;
-			}
-			if (accountsDB[i].state == BLOCKED)
-				return DECLINED_STOLEN_CARD;
-
-			accountsDB[i].balance -= transData->terminalData.transAmount;
-			transactionDB[currentIndexAccDb]=*transData;
-			return APPROVED;
-		}
-		
+	uint8_t accountFound=0;
+	
+	int i = 0;
+	for (i=0; i < 255; i++) {
+		if (isValidAccount(&transData->cardHolderData, &accountsDB[i]) == SERVER_OK)
+			accountFound = 1;
+			break;
 	}
-	if (foundAccount == 0)
+	if (accountFound == 0)
 		return FRAUD_CARD;
+	else
+	{
+		if (LOW_BALANCE == isAmountAvailable(&(transData->terminalData), &accountsDB[i]))
+			return DECLINED_INSUFFECIENT_FUND;
+		else if(BLOCKED_ACCOUNT==isBlockedAccount((accountsDB+i)))
+		{
+			return DECLINED_STOLEN_CARD;
 
+			if (SAVING_FAILED == saveTransaction(transData))
+				return INTERNAL_SERVER_ERROR;
+
+		}
+	}
 	return APPROVED;
 }
 EN_serverError_t isValidAccount(ST_cardData_t* cardData, ST_accountsDB_t* accountRefrence) {
 
 	
-		if (accountRefrence!=NULL)
-			if (0 == strcmp(cardData->primaryAccountNumber, accountRefrence->primaryAccountNumber)) {
-			
-				return SERVER_OK;
-			
+	if (accountRefrence != NULL) {
+		if (0 == strcmp(cardData->primaryAccountNumber, accountRefrence->primaryAccountNumber)) {
+			puts("YYY");
+			return SERVER_OK;
 
+
+		}
+		puts(cardData->primaryAccountNumber);
+		puts(accountRefrence->primaryAccountNumber);
 	}
-	
 	return ACCOUNT_NOT_FOUND;
 }
 EN_serverError_t isBlockedAccount(ST_accountsDB_t* accountRefrence){
@@ -55,16 +60,21 @@ EN_serverError_t isAmountAvailable(ST_terminalData_t* termData, ST_accountsDB_t*
 }
 EN_serverError_t saveTransaction(ST_transaction_t* transData){
 
+	if ((trnscDbIndex) == 255)
+		return SAVING_FAILED;
+
+
+	trnscDbIndex++;
 
 	transactionDB[trnscDbIndex].cardHolderData = transData->cardHolderData;
 	transactionDB[trnscDbIndex].terminalData = transData->terminalData;
 	transactionDB[trnscDbIndex].transactionSequenceNumber +=1;
-	trnscDbIndex++;
-
+	
+	
 	return SERVER_OK;
 }
 void listSavedTransactions(void) {
-	uint8_t* transStateVal[] = { "APPROVED", "DECLINED_INSUFFECIENT_FUND", "DECLINED_STOLEN_CARD", "FRAUD_CARD", "INTERNAL_SERVER_ERROR" };
+	
 	for (int i = 0; i < trnscDbIndex; i++)
 	{
 		printf("#########################");
