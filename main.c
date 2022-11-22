@@ -5,9 +5,13 @@ int main() {
 	//getCardHolderNameTest();
 	//getCardExpiryDateTest();
 	//getCardPANTest();
+	// 
+	// 
+	// 
+	isCardExpiredTest( );
 	//getTransactionDateTest();
 	//getTransactionAmountTest();
 	//isBelowMaxAmountTest();
-	setMaxAmountTest();
+	//setMaxAmountTest();
 	return 0;
 }
