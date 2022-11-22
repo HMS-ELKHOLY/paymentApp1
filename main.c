@@ -6,6 +6,7 @@ int main() {
 	//getCardExpiryDateTest();
 	//getCardPANTest();
 	//getTransactionDateTest();
-	getTransactionAmountTest();
+	//getTransactionAmountTest();
+	isBelowMaxAmountTest();
 	return 0;
 }
