@@ -163,3 +163,28 @@ void isBelowMaxAmountTest(void) {
 
 
 }
+/*****************setMaxAmount****************/
+void setMaxAmountTest(void) {
+
+	uint8_t* terminalState[] = { "TERMINAL_OK", "WRONG_DATE", "EXPIRED_CARD", "INVALID_CARD", "INVALID_AMOUNT", "EXCEED_MAX_AMOUNT", "INVALID_MAX_AMOUNT" };
+
+	ST_terminalData_t  terminalData ;
+	for (int i = 0; i < 4; i++) {
+
+		puts("#############################################################");
+		printf("test case %d\n", i);
+		printf("tester hussien\n");
+		printf("testing function setMaxAmountTest \n");
+
+		printf("If transaction max amount less than or equal to 0 will return the INVALID_MAX_AMOUNT error, else return TERMINAL_OK.\n");
+		printf("Input Data by tester");
+		printf("Expected Result : If the transaction amount is less than or equal to 0 will return INVALID_AMOUNT, else return TERMINAL_OK.\n");
+		
+		printf("Actual Result :");
+
+		puts(terminalState[setMaxAmount(&terminalData)]);
+		puts("#############################################################");
+	}
+
+
+}
