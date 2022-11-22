@@ -100,3 +100,31 @@ void getTransactionDateTest(void)
 	}
 
 }
+/*isCardExpired test*/
+void isCardExpiredTest(void) {
+	/**test cases goes here*********************/
+
+
+	/**make sure here*******************************/
+}
+void getTransactionAmountTest(void) {
+
+	uint8_t* terminalState[] = { "TERMINAL_OK", "WRONG_DATE", "EXPIRED_CARD", "INVALID_CARD", "INVALID_AMOUNT", "EXCEED_MAX_AMOUNT", "INVALID_MAX_AMOUNT" };
+
+	ST_terminalData_t  terminalData;
+	for (int i = 0; i < 6; i++) {
+
+		puts("#############################################################");
+		printf("test case %d\n", i);
+		printf("tester hussien\n");
+		printf("testing function getTransactionAmount\n");
+		printf("Input Data : by tester\n");
+		printf("Expected Result : If the transaction amount is less than or equal to 0 will return INVALID_AMOUNT, else return TERMINAL_OK.\n");
+		printf("Actual Result :");
+
+		puts(terminalState[getTransactionAmount(&terminalData)]);
+		puts("#############################################################");
+	}
+
+
+}
