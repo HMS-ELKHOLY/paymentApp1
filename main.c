@@ -1,6 +1,8 @@
 #include "Application/app.h"
 int main() {
 
-	appStart();
+	/*appStart();*/
+	getCardHolderNameTest();
+
 	return 0;
 }

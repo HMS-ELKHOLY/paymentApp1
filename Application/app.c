@@ -1,8 +1,9 @@
 #include "app.h"
 void appStart(void) {
-
+	
 	/********************__card__*****************************/
 	ST_cardData_t Card;
+	
 	EN_cardError_t CardHolderName_ErrorState = getCardHolderName(&Card);
 	if (WRONG_NAME == CardHolderName_ErrorState)
 	{

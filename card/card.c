@@ -71,3 +71,25 @@ EN_cardError_t getCardPAN(ST_cardData_t* cardData) {
 }
 
 
+/*TESTING*****************************************************/
+
+
+
+void getCardHolderNameTest(void) {
+	ST_cardData_t  cardData;
+	for (int i = 0; i < 3; i++) {
+
+		puts("#############################################################");
+		printf("test case %d\n", i);
+		printf("tester hussien\n");
+		printf("testing function getCardHolderName\n");
+		printf("Input Data : by tester\n");
+		printf("Expected Result : worong name if 20 > lenName || 24 < lenName || crdHldrName == NULL\n card ok otherwise\n");
+		uint8_t* cardState[] = { "CARD_OK", "WRONG_NAME", "WRONG_EXP_DATE", "WRONG_PAN" };
+		printf("Actual Result :");
+
+		puts(cardState[getCardHolderName(&cardData)]);
+		puts("#############################################################");
+	}
+	
+}
