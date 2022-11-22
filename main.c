@@ -1,14 +1,14 @@
 #include "Application/app.h"
 int main() {
 
-	/*appStart();*/
+	appStart();
 	//getCardHolderNameTest();
 	//getCardExpiryDateTest();
 	//getCardPANTest();
 	// 
 	// 
 	// 
-	isCardExpiredTest( );
+	//isCardExpiredTest( );
 	//getTransactionDateTest();
 	//getTransactionAmountTest();
 	//isBelowMaxAmountTest();
