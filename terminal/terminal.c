@@ -76,3 +76,27 @@ EN_terminalError_t isBelowMaxAmount(ST_terminalData_t* termData) {
 	return TERMINAL_OK;
 
 }
+
+/***********Testing****************/
+
+/*getTransactionDateTest*/
+void getTransactionDateTest(void)
+{	
+	uint8_t* terminalState[] = { "TERMINAL_OK", "WRONG_DATE", "EXPIRED_CARD", "INVALID_CARD", "INVALID_AMOUNT", "EXCEED_MAX_AMOUNT", "INVALID_MAX_AMOUNT" };
+
+	ST_terminalData_t  terminalData;
+	for (int i = 0; i < 3; i++) {
+
+		puts("#############################################################");
+		printf("test case %d\n", i);
+		printf("tester hussien\n");
+		printf("testing function getCardHolderName\n");
+		printf("Input Data : by tester\n");
+		printf("Expected Result : if the transaction date is NULL or is less than 10 characters or wrong format will return the WRONG_DATE error, else return TERMINAL_OK.\n");
+		printf("Actual Result :");
+
+		puts(terminalState[getTransactionDate(&terminalData)]);
+		puts("#############################################################");
+	}
+
+}
