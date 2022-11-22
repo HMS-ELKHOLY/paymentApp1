@@ -38,7 +38,7 @@ EN_serverError_t isValidAccount(ST_cardData_t* cardData, ST_accountsDB_t* accoun
 	
 	if (accountRefrence != NULL) {
 		if (0 == strcmp(cardData->primaryAccountNumber, accountRefrence->primaryAccountNumber)) {
-			puts("YYY");
+			//puts("YYY");
 			return SERVER_OK;
 
 
@@ -93,4 +93,41 @@ void listSavedTransactions(void) {
 	}
 
 }
+/**************************/
+//testing
+/**********************/
+//is valid account
+void isBlockedAccountTest(void)
+{
+	ST_accountsDB_t account1;
+	account1.state = BLOCKED;
+	ST_accountsDB_t account2;
+	account2.state = RUNNING;
+	uint8_t* serverState[] = { "SERVER_OK", "SAVING_FAILED", "TRANSACTION_NOT_FOUND", "ACCOUNT_NOT_FOUND", "LOW_BALANCE"," BLOCKED_ACCOUNT" };
 
+
+		puts("#############################################################");
+		printf("test case %d\n", 1);
+		printf("tester hussien\n");
+		printf("testing function isBlockedAccount \n");
+		printf("Input Data : by tester\n");
+		printf("If the account is running it will return SERVER_OK, else if the account is blocked it will return BLOCKED_ACCOUNT.\n");
+		printf("Actual Result :");
+
+		puts(serverState[isBlockedAccount(&account1)]);
+		puts("#############################################################");
+
+		puts("#############################################################");
+		printf("test case %d\n", 2);
+		printf("tester hussien\n");
+		printf("testing function isBlockedAccount \n");
+		printf("Input Data : by tester\n");
+		printf("If the account is running it will return SERVER_OK, else if the account is blocked it will return BLOCKED_ACCOUNT.\n");
+		printf("Actual Result :");
+
+		puts(serverState[isBlockedAccount(&account2)]);
+		puts("#############################################################");
+
+}
+
+ 

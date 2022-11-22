@@ -8,10 +8,11 @@ int main() {
 	// 
 	// 
 	// 
-	isCardExpiredTest( );
+	//isCardExpiredTest( );
 	//getTransactionDateTest();
 	//getTransactionAmountTest();
 	//isBelowMaxAmountTest();
 	//setMaxAmountTest();
+	isBlockedAccountTest();
 	return 0;
 }
