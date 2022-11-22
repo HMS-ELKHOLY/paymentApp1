@@ -32,6 +32,9 @@
     <ClInclude Include="server\server.h" />
     <ClInclude Include="terminal\terminal.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="media\card\1.png" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

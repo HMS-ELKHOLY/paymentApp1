@@ -18,7 +18,7 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t* termData){
 		return WRONG_DATE;
 	else
 	{
-		for (int i = 0; i++; i < 11 )
+		for (int i = 0; i < 11; i++)
 			termData->transactionDate[i] = trscnDate[i];
 
 
@@ -27,21 +27,27 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t* termData){
 	}
 }
 EN_terminalError_t isCardExpired(ST_cardData_t* cardData, ST_terminalData_t* termData) {
-	uint8_t chkMnth = ((cardData->cardExpirationDate[0] - termData->transactionDate[3]) >= 0 && (cardData->cardExpirationDate[1] - termData->transactionDate[4]) >= 0);
-	uint8_t chkYear = ((cardData->cardExpirationDate[3] - termData->transactionDate[8]) >= 0 && (cardData->cardExpirationDate[4] - termData->transactionDate[9]) >= 0);
+	uint8_t clkMnthExp = (cardData->cardExpirationDate[0] - '0')*10 + (cardData->cardExpirationDate[1] - '0') ;
+	uint8_t clkMnthTrsnc = (termData->transactionDate[0] - '0')*10 + (termData->transactionDate[1] - '0') ;
 
-	if (chkMnth!=0 && chkYear!=0)
+	uint8_t clkYearExp = (cardData->cardExpirationDate[3] - '0')*10 + (cardData->cardExpirationDate[4] - '0') ;
+	uint8_t clkYearTrsnc = (termData->transactionDate[8] - '0')*10 + (termData->transactionDate[9] - '0') ;
+
+	//printf("--***%d %d %d %d---\n", clkMnthExp-clkMnthTrsnc, clkMnthTrsnc, clkYearExp, clkYearTrsnc);
+
+	if (clkYearExp>clkYearTrsnc)	
 	{
 		return TERMINAL_OK;
 
 
 
 	}
-	else
+	else if((clkMnthExp>clkMnthTrsnc) && (clkYearExp== clkYearTrsnc))
 	{
-		return EXPIRED_CARD;
+		return TERMINAL_OK;
 	}
-
+	else
+	return EXPIRED_CARD;
 }
 EN_terminalError_t getTransactionAmount(ST_terminalData_t* termData) {
 	uint8_t TransactionAmount[20];
@@ -74,5 +80,147 @@ EN_terminalError_t isBelowMaxAmount(ST_terminalData_t* termData) {
 	if (termData->transAmount > termData->maxTransAmount)
 		return EXCEED_MAX_AMOUNT;
 	return TERMINAL_OK;
+
+}
+
+/***********Testing****************/
+
+/*getTransactionDateTest*/
+void getTransactionDateTest(void)
+{	
+	uint8_t* terminalState[] = { "TERMINAL_OK", "WRONG_DATE", "EXPIRED_CARD", "INVALID_CARD", "INVALID_AMOUNT", "EXCEED_MAX_AMOUNT", "INVALID_MAX_AMOUNT" };
+
+	ST_terminalData_t  terminalData;
+	for (int i = 0; i < 3; i++) {
+
+		puts("#############################################################");
+		printf("test case %d\n", i);
+		printf("tester hussien\n");
+		printf("testing function getCardHolderName\n");
+		printf("Input Data : by tester\n");
+		printf("Expected Result : if the transaction date is NULL or is less than 10 characters or wrong format will return the WRONG_DATE error, else return TERMINAL_OK.\n");
+		printf("Actual Result :");
+
+		puts(terminalState[getTransactionDate(&terminalData)]);
+		puts("#############################################################");
+	}
+
+}
+/*isCardExpired test*/
+void isCardExpiredTest(void) {
+	/**test cases goes here*********************/
+	ST_terminalData_t termData;
+	ST_cardData_t cardData;
+	uint8_t* terminalState[] = { "TERMINAL_OK", "WRONG_DATE", "EXPIRED_CARD", "INVALID_CARD", "INVALID_AMOUNT", "EXCEED_MAX_AMOUNT", "INVALID_MAX_AMOUNT" };
+
+	strcpy_s(termData.transactionDate,11, "05/05/2022");
+	strcpy_s(cardData.cardExpirationDate,6, "12/23");
+	puts("#############################################################");
+	printf("test case %d\n", 1);
+	printf("tester hussien\n");
+	printf("testing function isCardExpiredTest\n");
+	printf("Input Data : 05/05/2022  12/23 \n");
+	printf("If the transaction amount is less than or equal to 0 will return INVALID_AMOUNT, else return TERMINAL_OK.\n");
+	printf("Actual Result :");
+
+	puts(terminalState[isCardExpired(&cardData,&termData)]);
+	puts("#############################################################");
+
+
+
+
+	strcpy_s(termData.transactionDate,11, "05/05/2022");
+	strcpy_s(cardData.cardExpirationDate,6, "01/22");
+	puts("#############################################################");
+	printf("test case %d\n", 2);
+	printf("tester hussien\n");
+	printf("testing function isCardExpiredTest\n");
+	printf("Input Data : 05/05/2022  01/22 \n");
+	printf("If the transaction amount is less than or equal to 0 will return INVALID_AMOUNT, else return TERMINAL_OK.\n");
+	printf("Actual Result :");
+
+	puts(terminalState[isCardExpired(&cardData, &termData)]);
+	puts("#############################################################");
+	return;
+}
+void getTransactionAmountTest(void) {
+
+	uint8_t* terminalState[] = { "TERMINAL_OK", "WRONG_DATE", "EXPIRED_CARD", "INVALID_CARD", "INVALID_AMOUNT", "EXCEED_MAX_AMOUNT", "INVALID_MAX_AMOUNT" };
+
+	ST_terminalData_t  terminalData;
+	for (int i = 0; i < 6; i++) {
+
+		puts("#############################################################");
+		printf("test case %d\n", i);
+		printf("tester hussien\n");
+		printf("testing function getTransactionAmount\n");
+		printf("Input Data : by tester\n");
+		printf("Expected Result : If the transaction amount is less than or equal to 0 will return INVALID_AMOUNT, else return TERMINAL_OK.\n");
+		printf("Actual Result :");
+
+		puts(terminalState[getTransactionAmount(&terminalData)]);
+		puts("#############################################################");
+	}
+
+
+}
+
+/*isBelowMaxAmountTEST*****/
+
+void isBelowMaxAmountTest(void) {
+
+	uint8_t* terminalState[] = { "TERMINAL_OK", "WRONG_DATE", "EXPIRED_CARD", "INVALID_CARD", "INVALID_AMOUNT", "EXCEED_MAX_AMOUNT", "INVALID_MAX_AMOUNT" };
+	
+	ST_terminalData_t  terminalDataArray[3];
+	terminalDataArray[0].transAmount = 1000;
+	terminalDataArray[0].maxTransAmount = 2000;
+	terminalDataArray[1].transAmount = 1000;
+	terminalDataArray[1].maxTransAmount = 1000;
+	terminalDataArray[2].transAmount = 4000;
+	terminalDataArray[2].maxTransAmount = 2000;
+	
+	uint8_t* terminalStateEXpected[3] = { TERMINAL_OK ,TERMINAL_OK ,EXCEED_MAX_AMOUNT };
+	for (int i = 0; i < 3; i++) {
+
+		puts("#############################################################");
+		printf("test case %d\n", i);
+		printf("tester hussien\n");
+		printf("testing function isBelowMaxAmountTest\n");
+		printf("Input Data :tans amount %f max trans amount %f \n", terminalDataArray[i].transAmount,terminalDataArray[i].maxTransAmount);
+		printf("Expected Result : If the transaction amount is less than or equal to 0 will return INVALID_AMOUNT, else return TERMINAL_OK.\n");
+		uint8_t index = terminalStateEXpected[i];
+		printf("Expected Result for this case : %s.\n", terminalState[index]);
+
+		printf("Actual Result :");
+
+		puts(terminalState[isBelowMaxAmount(&terminalDataArray[i])]);
+		puts("#############################################################");
+	}
+
+
+}
+/*****************setMaxAmount****************/
+void setMaxAmountTest(void) {
+
+	uint8_t* terminalState[] = { "TERMINAL_OK", "WRONG_DATE", "EXPIRED_CARD", "INVALID_CARD", "INVALID_AMOUNT", "EXCEED_MAX_AMOUNT", "INVALID_MAX_AMOUNT" };
+
+	ST_terminalData_t  terminalData ;
+	for (int i = 0; i < 4; i++) {
+
+		puts("#############################################################");
+		printf("test case %d\n", i);
+		printf("tester hussien\n");
+		printf("testing function setMaxAmountTest \n");
+
+		printf("If transaction max amount less than or equal to 0 will return the INVALID_MAX_AMOUNT error, else return TERMINAL_OK.\n");
+		printf("Input Data by tester");
+		printf("Expected Result : If the transaction amount is less than or equal to 0 will return INVALID_AMOUNT, else return TERMINAL_OK.\n");
+		
+		printf("Actual Result :");
+
+		puts(terminalState[setMaxAmount(&terminalData)]);
+		puts("#############################################################");
+	}
+
 
 }
