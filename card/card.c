@@ -71,10 +71,10 @@ EN_cardError_t getCardPAN(ST_cardData_t* cardData) {
 }
 
 
-/*TESTING*****************************************************/
-
-
-
+/*************************************TESTING*****************************************************/
+/**/
+/**/
+/*************************************************************************************************/
 void getCardHolderNameTest(void) {
 	ST_cardData_t  cardData;
 	for (int i = 0; i < 3; i++) {
@@ -92,4 +92,41 @@ void getCardHolderNameTest(void) {
 		puts("#############################################################");
 	}
 	
+}
+//******************getCardExpiryDate
+void getCardExpiryDateTest(void) {
+	ST_cardData_t  cardData;
+	for (int i = 0; i < 6; i++) {
+
+		puts("#############################################################");
+		printf("test case %d\n", i);
+		printf("tester hussien\n");
+		printf("testing function getCardExpiryDate\n");
+		printf("Input Data : by tester\n");
+		printf("Expected Result :If the card expiry date is NULL, less or more than 5 characters, or has the wrong format will return the WRONG_EXP_DATE error, else return CARD_OK\n");
+		uint8_t* cardState[] = { "CARD_OK", "WRONG_NAME", "WRONG_EXP_DATE", "WRONG_PAN" };
+		printf("Actual Result :");
+
+		puts(cardState[getCardExpiryDate(&cardData)]);
+		puts("#############################################################");
+	}
+
+}
+/***********getCardPANTest */
+void getCardPANTest(void) {
+	ST_cardData_t  cardData;
+	for (int i = 0; i < 6; i++) {
+
+		puts("#############################################################");
+		printf("test case %d\n", i);
+		printf("tester hussien\n");
+		printf("testing function getCardPANTest\n");
+		printf("Input Data : by tester\n");
+		printf("Expected Result :If the PAN is NULL, less than 16 or more than 19 characters, will return the WRONG_PAN error, else return CARD_OK.\n");
+		uint8_t* cardState[] = { "CARD_OK", "WRONG_NAME", "WRONG_EXP_DATE", "WRONG_PAN" };
+		printf("Actual Result :");
+
+		puts(cardState[getCardPAN(&cardData)]);
+		puts("#############################################################");
+	}
 }

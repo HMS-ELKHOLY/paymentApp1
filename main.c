@@ -2,7 +2,8 @@
 int main() {
 
 	/*appStart();*/
-	getCardHolderNameTest();
-
+	//getCardHolderNameTest();
+	//getCardExpiryDateTest();
+	getCardPANTest();
 	return 0;
 }
